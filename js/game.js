@@ -15,7 +15,7 @@ function buyOwOGen(i) {
 
 function updateOwOGenMults() {
     for (let i = 1; i <= 6; i++) {
-        player.owoGenerators[i - 1].mult = Decimal.pow(1.165, player.owoGenerators[i - 1].level);
+        player.owoGenerators[i - 1].mult = Decimal.pow(1.15, player.owoGenerators[i - 1].level);
     }
 }
 
