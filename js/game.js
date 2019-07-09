@@ -20,7 +20,8 @@ function updateOwOGenMults() {
 }
 
 function updateOwOGenCost(i) {
-    player.owoGenerators[i - 1].cost = player.owoGenerators[i - 1].cost.add(player.owoGenerators[i - 1].cost.times(Decimal.add(0.32 * i, Decimal.times(1.004 * i - 1, player.owoGenerators[i - 1].level.div(100 / (i * i * i))))));
+    //player.owoGenerators[i - 1].cost = player.owoGenerators[i - 1].cost.add(player.owoGenerators[i - 1].cost.times(Decimal.add(0.32 * i, Decimal.times(1.004 * i - 1, player.owoGenerators[i - 1].level.div(100 / (i * i * i))))));
+    player.owoGenerators[i - 1].cost = player.owoGenerators[i - 1].cost.pow(i)
 }
 
 //String Formatting
