@@ -1,5 +1,5 @@
 let player = {
-    owo: new Decimal(10),
+    owo: new Decimal('10'),
     owoGenerators: {}
 };
 
@@ -20,8 +20,7 @@ function updateOwOGenMults() {
 }
 
 function updateOwOGenCost(i) {
-    //player.owoGenerators[i - 1].cost = player.owoGenerators[i - 1].cost.add(player.owoGenerators[i - 1].cost.times(Decimal.add(0.32 * i, Decimal.times(1.004 * i - 1, player.owoGenerators[i - 1].level.div(100 / (i * i * i))))));
-    player.owoGenerators[i - 1].cost = player.owoGenerators[i - 1].cost.pow(i)
+    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.2, (i - 1) * 0.1))));
 }
 
 //String Formatting
@@ -81,8 +80,15 @@ function gameLoop() {
 
 function init() {
     player.owoGenerators = getOwOGenerators();
+
+    player.owoGenerators[0].cost = new Decimal('10');
+    player.owoGenerators[1].cost = new Decimal('1e3');
+    player.owoGenerators[2].cost = new Decimal('1e8');
+    player.owoGenerators[3].cost = new Decimal('1e15');
+    player.owoGenerators[4].cost = new Decimal('1e30');
+    player.owoGenerators[5].cost = new Decimal('1e50');
+
     for (let i = 1; i <= 6; i++) {
-        player.owoGenerators[i - 1].cost = Decimal.pow(10, 4 * ((i - 1) * (i - 1))).add(9);
         player.owoGenerators[i - 1].baseCost = player.owoGenerators[i - 1].cost;
     }
 }
