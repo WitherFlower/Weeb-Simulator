@@ -20,7 +20,7 @@ function updateOwOGenMults() {
 }
 
 function updateOwOGenCost(i) {
-    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.2, (i - 1) * 0.1))));
+    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.2, (i - 1) * i * 0.1))));
 }
 
 //String Formatting
