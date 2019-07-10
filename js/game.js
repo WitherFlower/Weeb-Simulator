@@ -56,7 +56,7 @@ function updateOwO() {
         player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(33))
     }
     player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33));
-    auto();
+    // auto();
 }
 
 function update() {
