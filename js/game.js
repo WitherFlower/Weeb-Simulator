@@ -24,13 +24,13 @@ function updateOwOGenCost(i) {
 }
 
 
-function auto() {
-    for (let i = 1; i <= 6; i++) {
-        if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
-            buyOwOGen(i);
-        }
-    }
-}
+// function auto() {
+//     for (let i = 1; i <= 6; i++) {
+//         if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
+//             buyOwOGen(i);
+//         }
+//     }
+// }
 
 //String Formatting
 
