@@ -1,5 +1,5 @@
 let player = {
-    owo: new Decimal('10'),
+    owo: new Decimal('1e5'),
     owoGenerators: {}
 };
 
@@ -20,7 +20,16 @@ function updateOwOGenMults() {
 }
 
 function updateOwOGenCost(i) {
-    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.2, (i - 1) * i * 0.1))));
+    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.1, i * i * 0.1))));
+}
+
+
+function auto() {
+    for (let i = 1; i <= 6; i++) {
+        if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
+            buyOwOGen(i);
+        }
+    }
 }
 
 //String Formatting
@@ -46,7 +55,8 @@ function updateOwO() {
     for (i = 6; i > 1; i--) {
         player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(33))
     }
-    player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33))
+    player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33));
+    auto();
 }
 
 function update() {
