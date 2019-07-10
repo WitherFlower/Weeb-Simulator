@@ -81,8 +81,15 @@ function gameLoop() {
 
 function init() {
     player.owoGenerators = getOwOGenerators();
+
+    player.owoGenerators[0].cost = new Decimal('10');
+    player.owoGenerators[1].cost = new Decimal('1e3');
+    player.owoGenerators[2].cost = new Decimal('1e8');
+    player.owoGenerators[3].cost = new Decimal('1e15');
+    player.owoGenerators[4].cost = new Decimal('1e30');
+    player.owoGenerators[5].cost = new Decimal('1e50');
+
     for (let i = 1; i <= 6; i++) {
-        player.owoGenerators[i - 1].cost = Decimal.pow(10, 4 * ((i - 1) * (i - 1))).add(9);
         player.owoGenerators[i - 1].baseCost = player.owoGenerators[i - 1].cost;
     }
 }
