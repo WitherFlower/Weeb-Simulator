@@ -1,5 +1,5 @@
 let player = {
-    owo: new Decimal('100'),
+    owo: new Decimal('10'),
     owoGenerators: {}
 };
 
