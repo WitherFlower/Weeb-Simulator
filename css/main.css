@@ -18,7 +18,8 @@
 #Generators th,
 #Generators td {
     width: 2vw;
-    height: 1.5vh;
+    max-height: 1.5vh;
+    height: flex;
 }
 
 table tbody tr {
