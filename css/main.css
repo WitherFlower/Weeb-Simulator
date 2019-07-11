@@ -18,12 +18,12 @@
 #Generators th,
 #Generators td {
     width: 2vw;
-    max-height: 1.5vh;
+    max-height: 300px;
     height: flex;
 }
 
 table tbody tr {
-    height: 5vh;
+    height: flex;
 }
 
 table tbody tr th,
