@@ -1,4 +1,4 @@
-# Weeb-Simulator
+# Weeb Simulator
 
 owo
 
