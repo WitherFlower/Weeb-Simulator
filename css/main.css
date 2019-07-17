@@ -87,3 +87,12 @@ td {
 body {
     background-color: pink;
 }
+
+#weebEssence {
+    font-size: 20px;
+}
+
+#weebEssenceAmount {
+    color: red;
+    font-weight: bold;
+}
