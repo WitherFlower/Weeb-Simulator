@@ -2,6 +2,7 @@ let player = {
     owo: new Decimal('10'),
     owoGenerators: {},
     weebEssence: new Decimal('0'),
+    essenceReset: false
 };
 
 function buyOwOGen(i) {
@@ -41,6 +42,8 @@ function essenceReset() {
             generator.mult = generator.mult.times(getEssenceMult());
         });
     }
+    document.getElementById("weebEssence").hidden = false;
+    player.essenceReset = true;
 }
 
 function getEssenceMult() {
@@ -122,12 +125,18 @@ function displayEssenceBonus() {
     document.getElementById("weebEssenceBonus").innerHTML = getEssenceBonus();
 }
 
+function displayEssenceStuff() {
+    displayEssenceAmount();
+    displayEssenceBonus();
+}
+
 function display() {
     displayOwO();
     displayOwOGenerators();
     displayEssenceGain();
-    displayEssenceAmount();
-    displayEssenceBonus();
+    if (player.essenceReset) {
+        displayEssenceStuff();
+    }
 }
 
 function gameLoop() {
