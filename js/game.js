@@ -64,7 +64,7 @@ function getEssenceBonus() {
 }
 
 function moeReset() {
-    if (player.owo.gte(getMoeResetCost)) {
+    if (player.owo.gte(getMoeResetCost())) {
         player.moeReset = true;
         player.moe = player.moe.add(1);
         player.owo = new Decimal(10);
