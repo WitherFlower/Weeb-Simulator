@@ -1,6 +1,7 @@
 let player = {
     owo: new Decimal('10'),
-    owoGenerators: {}
+    owoGenerators: {},
+    weebEssence: new Decimal('0'),
 };
 
 function buyOwOGen(i) {
@@ -23,6 +24,22 @@ function updateOwOGenCost(i) {
     player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.1, i * i * 0.1))));
 }
 
+function getEssenceGain() {
+    if (player.owo.gte('1e12')) {
+        let gain = player.owo.log10().minus(11).times(player.owo.log10().minus(11)).floor();
+        return gain;
+    } else {
+        return 0;
+    }
+}
+
+function essenceReset() {
+    if (player.owo.gte('1e12')) {
+        player.weebEssence = player.weebEssence.add(getEssenceGain())
+        player.owo = new Decimal(10);
+        player.owoGenerators = getOwOGenerators();
+    }
+}
 
 // function auto() {
 //     for (let i = 1; i <= 6; i++) {
@@ -56,12 +73,6 @@ function updateOwO() {
         player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(33))
     }
     player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33));
-    // auto();
-}
-
-function getEssenceGain() {
-    let gain = player.owo.log10().times(player.owo.log10()).floor()
-    return gain
 }
 
 function update() {
@@ -84,15 +95,21 @@ function displayOwOGenerators() {
 }
 
 function displayEssenceGain() {
+    document.getElementById("essenceReset").innerHTML = "Reset all generators and get " + getEssenceGain() + " Weeb Essence";
     if (player.owo.gte('1e12')) {
-        document.getElementById("essenceGain").innerHTML = "Reset all generators and get " + getEssenceGain() + " Weeb Essence";
+        document.getElementById("essenceReset").hidden = false;
     }
+}
+
+function displayEssenceAmount() {
+    document.getElementById("weebEssenceAmount").innerHTML = toScientific(player.weebEssence.toString());
 }
 
 function display() {
     displayOwO();
     displayOwOGenerators();
     displayEssenceGain();
+    displayEssenceAmount();
 }
 
 function gameLoop() {
@@ -103,16 +120,7 @@ function gameLoop() {
 function init() {
     player.owoGenerators = getOwOGenerators();
 
-    player.owoGenerators[0].cost = new Decimal('10');
-    player.owoGenerators[1].cost = new Decimal('1e3');
-    player.owoGenerators[2].cost = new Decimal('1e8');
-    player.owoGenerators[3].cost = new Decimal('1e15');
-    player.owoGenerators[4].cost = new Decimal('1e30');
-    player.owoGenerators[5].cost = new Decimal('1e50');
 
-    for (let i = 1; i <= 6; i++) {
-        player.owoGenerators[i - 1].baseCost = player.owoGenerators[i - 1].cost;
-    }
 }
 
 init();
