@@ -18,6 +18,16 @@
             You have <span id="weebEssenceAmount">0</span> Weeb Essence, granting a <span id="weebEssenceBonus">0%</span> bonus on all of your generators.
         </p>
     </div>
+    <div class="center">
+        <p id="moeMult" hidden=true>
+            You have <span id="moeAmount">0</span> Moe, granting a <span id="moeBonus">+0.04x</span> multiplier per upgrade.
+        </p>
+    </div>
+    <div class="center">
+        <p id="upgradeMult">
+            Your multiplier per upgrade is currently <span id="upgradeMultiplier">1.15x</span>
+        </p>
+    </div>
     <table id="Generators">
         <tbody>
             <tr>
@@ -73,6 +83,10 @@
     </table>
     <div class="center">
         <button id="essenceReset" class="stdButton" hidden=true onclick="essenceReset()">Reset all generators and get 1 Weeb Essence</button>
+    </div>
+    <br/>
+    <div class="center">
+        <button id="moeReset" class="stdButton" hidden=true onclick="moeReset()">Reset all generators and all Weeb Essence to get a Moe. <br />Cost : 1e50 owo</button>
     </div>
 </body>
 
