@@ -59,6 +59,11 @@ function updateOwO() {
     // auto();
 }
 
+function getEssenceGain() {
+    let gain = player.owo.log10().times(player.owo.log10()).floor()
+    return gain
+}
+
 function update() {
     updateOwO();
 }
@@ -78,9 +83,16 @@ function displayOwOGenerators() {
     }
 }
 
+function displayEssenceGain() {
+    if (player.owo.gte('1e12')) {
+        document.getElementById("essenceGain").innerHTML = "Reset all generators and get " + getEssenceGain() + " Weeb Essence";
+    }
+}
+
 function display() {
     displayOwO();
-    displayOwOGenerators()
+    displayOwOGenerators();
+    displayEssenceGain();
 }
 
 function gameLoop() {
