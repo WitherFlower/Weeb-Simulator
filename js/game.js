@@ -146,9 +146,29 @@ function gameLoop() {
 
 function init() {
     player.owoGenerators = getOwOGenerators();
+    if (localStorage.getItem("Weeb-Simulator-playerdata") != null) {
+        loadSave();
+    }
+}
 
+function loadSave() {
+    player = JSON.parse(localStorage.getItem("Weeb-Simulator-playerdata"));
+    player.owo = new Decimal(player.owo);
+    player.owoGenerators.forEach(generator => {
+        generator.amount = new Decimal(generator.amount);
+        generator.level = new Decimal(generator.level);
+        generator.mult = new Decimal(generator.mult);
+        generator.cost = new Decimal(generator.cost);
+        generator.baseCost = new Decimal(generator.baseCost);
+    });
+    player.weebEssence = new Decimal(player.weebEssence);
+}
 
+function save() {
+    localStorage.setItem("Weeb-Simulator-playerdata", JSON.stringify(player));
+    console.log("Saved on : " + Date.now())
 }
 
 init();
 setInterval(gameLoop, 33);
+setInterval(save, 30000);
