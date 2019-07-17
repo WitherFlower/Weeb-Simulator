@@ -92,7 +92,8 @@ body {
     font-size: 20px;
 }
 
-#weebEssenceAmount {
+#weebEssenceAmount,
+#weebEssenceBonus {
     color: red;
     font-weight: bold;
 }
