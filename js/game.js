@@ -9,15 +9,13 @@ function buyOwOGen(i) {
         player.owoGenerators[i - 1].level = player.owoGenerators[i - 1].level.add(1);
         player.owoGenerators[i - 1].amount = player.owoGenerators[i - 1].amount.add(1);
         player.owo = player.owo.minus(player.owoGenerators[i - 1].cost);
-        updateOwOGenMults();
+        updateOwOGenMult(i);
         updateOwOGenCost(i);
     }
 }
 
-function updateOwOGenMults() {
-    for (let i = 1; i <= 6; i++) {
-        player.owoGenerators[i - 1].mult = Decimal.pow(1.15, player.owoGenerators[i - 1].level);
-    }
+function updateOwOGenMult(i) {
+    player.owoGenerators[i - 1].mult = player.owoGenerators[i - 1].mult.times(1.15);
 }
 
 function updateOwOGenCost(i) {
@@ -38,7 +36,22 @@ function essenceReset() {
         player.weebEssence = player.weebEssence.add(getEssenceGain())
         player.owo = new Decimal(10);
         player.owoGenerators = getOwOGenerators();
+
+        player.owoGenerators.forEach(generator => {
+            generator.mult = generator.mult.times(getEssenceMult());
+        });
     }
+}
+
+function getEssenceMult() {
+    let mult = player.weebEssence.times(0.2).add(1);
+    return mult;
+}
+
+function getEssenceBonus() {
+    let bonus = getEssenceMult();
+    bonus = bonus.minus(1).times(100);
+    return toScientific(bonus.toString()) + "%"
 }
 
 // function auto() {
@@ -105,11 +118,16 @@ function displayEssenceAmount() {
     document.getElementById("weebEssenceAmount").innerHTML = toScientific(player.weebEssence.toString());
 }
 
+function displayEssenceBonus() {
+    document.getElementById("weebEssenceBonus").innerHTML = getEssenceBonus();
+}
+
 function display() {
     displayOwO();
     displayOwOGenerators();
     displayEssenceGain();
     displayEssenceAmount();
+    displayEssenceBonus();
 }
 
 function gameLoop() {
