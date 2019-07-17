@@ -2,7 +2,9 @@ let player = {
     owo: new Decimal('10'),
     owoGenerators: {},
     weebEssence: new Decimal('0'),
-    essenceReset: false
+    essenceReset: false,
+    moe: new Decimal('0'),
+    moeReset: false,
 };
 
 function buyOwOGen(i) {
@@ -16,11 +18,16 @@ function buyOwOGen(i) {
 }
 
 function updateOwOGenMult(i) {
-    player.owoGenerators[i - 1].mult = player.owoGenerators[i - 1].mult.times(1.15);
+    player.owoGenerators[i - 1].mult = getowoUpgradeMult().pow(player.owoGenerators[i - 1].level).times(getEssenceMult());
 }
 
 function updateOwOGenCost(i) {
     player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.1, i * i * 0.1))));
+}
+
+function getowoUpgradeMult() {
+    let mult = new Decimal(1.15).add(player.moe.times(0.04));
+    return mult;
 }
 
 function getEssenceGain() {
@@ -37,10 +44,9 @@ function essenceReset() {
         player.weebEssence = player.weebEssence.add(getEssenceGain())
         player.owo = new Decimal(10);
         player.owoGenerators = getOwOGenerators();
-
-        player.owoGenerators.forEach(generator => {
-            generator.mult = generator.mult.times(getEssenceMult());
-        });
+        for (let i = 1; i <= 6; i++) {
+            updateOwOGenMult(i)
+        }
     }
     document.getElementById("weebEssence").hidden = false;
     player.essenceReset = true;
@@ -57,6 +63,24 @@ function getEssenceBonus() {
     return toScientific(bonus.toString()) + "%"
 }
 
+function moeReset() {
+    if (player.owo.gte(getMoeResetCost)) {
+        player.moeReset = true;
+        player.moe = player.moe.add(1);
+        player.owo = new Decimal(10);
+        player.owoGenerators = getOwOGenerators();
+        for (let i = 1; i <= 6; i++) {
+            updateOwOGenMult(i)
+        }
+        player.weebEssence = new Decimal(0);
+    }
+}
+
+function getMoeResetCost() {
+    let cost = Decimal.pow(10, Decimal.add(50, Decimal.times(50, player.moe.times(player.moe.add(1)).div(2))));
+    return cost;
+}
+
 // function auto() {
 //     for (let i = 1; i <= 6; i++) {
 //         if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
@@ -65,22 +89,6 @@ function getEssenceBonus() {
 //     }
 // }
 
-//String Formatting
-
-function toScientific(string) {
-    let a = new Decimal(string)
-    if (!(a.gte(9e15))) {
-        s = a.toPrecision(3);
-        s = s.substring(0, s.indexOf("+")) + s.substring(s.indexOf("+") + 1, s.length);
-        return s;
-    } else {
-        s = a.toString();
-        if (s.indexOf("e") > 4) {
-            s = s.substring(0, 4) + s.substring(s.indexOf("e"), s.length);
-        }
-        return s;
-    }
-}
 
 //Update Functions
 
@@ -130,6 +138,30 @@ function displayEssenceStuff() {
     displayEssenceBonus();
 }
 
+function displayMoeButton() {
+    if (player.owo.gte('1e50')) {
+        document.getElementById("moeReset").hidden = false;
+    }
+    document.getElementById("moeReset").innerHTML = "Reset all generators and all Weeb Essence to get a Moe. <br />Cost : " + toScientific(getMoeResetCost().toString()) + " owo";
+}
+
+function displayMoeMult() {
+    if (player.moeReset) {
+        document.getElementById("moeMult").hidden = false;
+        document.getElementById("moeAmount").innerHTML = toScientific(player.moe.toString());
+        document.getElementById("moeBonus").innerHTML = "+" + toScientific(player.moe.times(0.04).toString()) + "x";
+    }
+}
+
+function displayUpgradeMult() {
+    document.getElementById("upgradeMultiplier").innerHTML = toScientific(getowoUpgradeMult().toString()) + "x";
+}
+
+function displayMoeStuff() {
+    displayMoeButton();
+    displayMoeMult();
+}
+
 function display() {
     displayOwO();
     displayOwOGenerators();
@@ -137,6 +169,8 @@ function display() {
     if (player.essenceReset) {
         displayEssenceStuff();
     }
+    displayMoeStuff();
+    displayUpgradeMult();
 }
 
 function gameLoop() {
@@ -162,12 +196,31 @@ function loadSave() {
         generator.baseCost = new Decimal(generator.baseCost);
     });
     player.weebEssence = new Decimal(player.weebEssence);
+    player.moe = new Decimal(player.moe);
 }
 
 function save() {
     localStorage.setItem("Weeb-Simulator-playerdata", JSON.stringify(player));
     console.log("Saved on : " + Date.now())
 }
+
+//String Formatting
+
+function toScientific(string) {
+    let a = new Decimal(string)
+    if (!(a.gte(9e15))) {
+        s = a.toPrecision(3);
+        s = s.substring(0, s.indexOf("+")) + s.substring(s.indexOf("+") + 1, s.length);
+        return s;
+    } else {
+        s = a.toString();
+        if (s.indexOf("e") > 4) {
+            s = s.substring(0, 4) + s.substring(s.indexOf("e"), s.length);
+        }
+        return s;
+    }
+}
+
 
 init();
 setInterval(gameLoop, 33);
