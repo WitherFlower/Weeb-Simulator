@@ -64,7 +64,6 @@ td {
 
 .stdButton {
     max-width: 350px;
-    max-height: 100px;
     width: flex;
     height: flex;
     padding: 10px;
@@ -95,5 +94,12 @@ body {
 #weebEssenceAmount,
 #weebEssenceBonus {
     color: red;
+    font-weight: bold;
+}
+
+#moeAmount,
+#moeBonus,
+#upgradeMultiplier {
+    color: green;
     font-weight: bold;
 }
