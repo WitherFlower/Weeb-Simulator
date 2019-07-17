@@ -48,7 +48,6 @@ function essenceReset() {
             updateOwOGenMult(i)
         }
     }
-    document.getElementById("weebEssence").hidden = false;
     player.essenceReset = true;
 }
 
@@ -126,6 +125,9 @@ function displayEssenceGain() {
 }
 
 function displayEssenceAmount() {
+    if (player.essenceReset) {
+        document.getElementById("weebEssence").hidden = false;
+    }
     document.getElementById("weebEssenceAmount").innerHTML = toScientific(player.weebEssence.toString());
 }
 
