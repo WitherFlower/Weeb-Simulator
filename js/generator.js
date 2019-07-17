@@ -3,6 +3,16 @@ function getOwOGenerators() {
     for (let i = 1; i <= 6; i++) {
         owoGenerators.push(getNewGenerator('owoGen' + i))
     }
+    owoGenerators[0].cost = new Decimal('10');
+    owoGenerators[1].cost = new Decimal('1e3');
+    owoGenerators[2].cost = new Decimal('1e8');
+    owoGenerators[3].cost = new Decimal('1e15');
+    owoGenerators[4].cost = new Decimal('1e30');
+    owoGenerators[5].cost = new Decimal('1e50');
+
+    for (let i = 1; i <= 6; i++) {
+        owoGenerators[i - 1].baseCost = owoGenerators[i - 1].cost;
+    }
     return owoGenerators;
 }
 
