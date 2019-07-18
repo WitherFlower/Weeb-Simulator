@@ -5,15 +5,26 @@ let player = {
     essenceReset: false,
     moe: new Decimal('0'),
     moeReset: false,
+    uwu: new Decimal('0'),
+    uwuReset: false,
+    uwuGlitch: false,
 };
 
+let baseowoUpgradeMult = 1.15;
+let baseMoeBonus = 0.03;
+let baseEssenceBonus = 0.2;
+
+// owo Stuff
+
 function buyOwOGen(i) {
-    if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
-        player.owoGenerators[i - 1].level = player.owoGenerators[i - 1].level.add(1);
-        player.owoGenerators[i - 1].amount = player.owoGenerators[i - 1].amount.add(1);
-        player.owo = player.owo.minus(player.owoGenerators[i - 1].cost);
-        updateOwOGenMult(i);
-        updateOwOGenCost(i);
+    if (!player.uwuGlitch) {
+        if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
+            player.owoGenerators[i - 1].level = player.owoGenerators[i - 1].level.add(1);
+            player.owoGenerators[i - 1].amount = player.owoGenerators[i - 1].amount.add(1);
+            player.owo = player.owo.minus(player.owoGenerators[i - 1].cost);
+            updateOwOGenMult(i);
+            updateOwOGenCost(i);
+        }
     }
 }
 
@@ -26,9 +37,21 @@ function updateOwOGenCost(i) {
 }
 
 function getowoUpgradeMult() {
-    let mult = new Decimal(1.15).add(player.moe.times(0.04));
+    let mult = new Decimal(baseowoUpgradeMult).add(player.moe.times(baseMoeBonus));
     return mult;
 }
+
+function maxAllowo() {
+    if (!player.uwuGlitch) {
+        for (let i = 1; i <= 6; i++) {
+            while (player.owo.gte(player.owoGenerators[i - 1].cost)) {
+                buyOwOGen(i);
+            }
+        }
+    }
+}
+
+// Essence Stuff
 
 function getEssenceGain() {
     if (player.owo.gte('1e12')) {
@@ -52,7 +75,7 @@ function essenceReset() {
 }
 
 function getEssenceMult() {
-    let mult = player.weebEssence.times(0.2).add(1);
+    let mult = player.weebEssence.times(baseEssenceBonus).add(1);
     return mult;
 }
 
@@ -62,22 +85,47 @@ function getEssenceBonus() {
     return toScientific(bonus.toString()) + "%"
 }
 
+// Moe Stuff
+
 function moeReset() {
     if (player.owo.gte(getMoeResetCost())) {
         player.moeReset = true;
         player.moe = player.moe.add(1);
+        player.weebEssence = new Decimal(0);
         player.owo = new Decimal(10);
         player.owoGenerators = getOwOGenerators();
         for (let i = 1; i <= 6; i++) {
             updateOwOGenMult(i)
         }
-        player.weebEssence = new Decimal(0);
     }
 }
 
 function getMoeResetCost() {
     let cost = Decimal.pow(10, Decimal.add(50, Decimal.times(50, player.moe.times(player.moe.add(1)).div(2))));
     return cost;
+}
+
+// uwu Stuff
+
+function checkuwuReset() {
+    if (player.owo.gte('1e400')) {
+        player.uwuGlitch = true;
+    } else {
+        player.uwuGlitch = false;
+    }
+}
+
+function uwuReset() {
+    player.owo = new Decimal(10);
+    player.uwuReset = true;
+    player.uwu = player.uwu.add(1);
+    player.uwuGlitch = false;
+    player.moe = new Decimal(0);
+    player.weebEssence = new Decimal(0);
+    player.owoGenerators = getOwOGenerators();
+    for (let i = 1; i <= 6; i++) {
+        updateOwOGenMult(i)
+    }
 }
 
 // function auto() {
@@ -98,14 +146,37 @@ function updateOwO() {
     player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33));
 }
 
+function updateUwU() {
+    checkuwuReset();
+}
+
 function update() {
-    updateOwO();
+    if (!player.uwuGlitch) {
+        updateOwO();
+    }
+    updateUwU();
+}
+
+//Show Tab
+
+function showtab(tabName) {
+    document.getElementById("generatorstab").hidden = true;
+    document.getElementById("otakutab").hidden = true;
+    document.getElementById(tabName).hidden = false;
 }
 
 //Display Functions
 
+function displayTabButtons() {
+    if (player.uwuReset) {
+        document.getElementById("uwuTabBtn").hidden = false;
+    }
+}
+
 function displayOwO() {
     document.getElementById("owo").innerHTML = "You have " + toScientific(player.owo.toString()) + " owo";
+    document.getElementById("owoGain").innerHTML = "You are gaining " + toScientific(
+        player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).toString()) + " owo per second";
 }
 
 function displayOwOGenerators() {
@@ -118,9 +189,12 @@ function displayOwOGenerators() {
 }
 
 function displayEssenceGain() {
-    document.getElementById("essenceReset").innerHTML = "Reset all generators and get " + getEssenceGain() + " Weeb Essence";
-    if (player.owo.gte('1e12')) {
+    document.getElementById("essenceReset").innerHTML = "Reset all generators and get " + toScientific(getEssenceGain().toString()) + " Weeb Essence";
+    if (player.owo.gte('1e12') || player.essenceReset) {
         document.getElementById("essenceReset").hidden = false;
+    }
+    if (player.uwuGlitch) {
+        document.getElementById("essenceReset").hidden = true;
     }
 }
 
@@ -141,10 +215,13 @@ function displayEssenceStuff() {
 }
 
 function displayMoeButton() {
-    if (player.owo.gte('1e50')) {
+    if (player.owo.gte('1e50') || player.moeReset) {
         document.getElementById("moeReset").hidden = false;
     }
     document.getElementById("moeReset").innerHTML = "Reset all generators and all Weeb Essence to get a Moe. <br />Cost : " + toScientific(getMoeResetCost().toString()) + " owo";
+    if (player.uwuGlitch) {
+        document.getElementById("moeReset").hidden = true;
+    }
 }
 
 function displayMoeMult() {
@@ -164,7 +241,20 @@ function displayMoeStuff() {
     displayMoeMult();
 }
 
+function displayuwuForcedReset() {
+    if (player.uwuGlitch) {
+        document.getElementById("largeuwuReset").hidden = false;
+    } else {
+        document.getElementById("largeuwuReset").hidden = true;
+    }
+}
+
+function displayuwuStuff() {
+    displayuwuForcedReset();
+}
+
 function display() {
+    displayTabButtons();
     displayOwO();
     displayOwOGenerators();
     displayEssenceGain();
@@ -173,6 +263,7 @@ function display() {
     }
     displayMoeStuff();
     displayUpgradeMult();
+    displayuwuStuff();
 }
 
 function gameLoop() {
@@ -199,12 +290,25 @@ function loadSave() {
     });
     player.weebEssence = new Decimal(player.weebEssence);
     player.moe = new Decimal(player.moe);
+    player.uwu = new Decimal(player.uwu);
 }
 
 function save() {
     localStorage.setItem("Weeb-Simulator-playerdata", JSON.stringify(player));
     console.log("Saved on : " + Date.now())
 }
+
+//Hotkeys
+
+window.addEventListener('keydown', function(event) {
+    console.log(event.keyCode)
+    switch (event.keyCode) {
+        case 77: // M
+            maxAllowo();
+            break;
+    }
+}, false);
+
 
 //String Formatting
 
