@@ -228,7 +228,7 @@ function displayMoeMult() {
     if (player.moeReset) {
         document.getElementById("moeMult").hidden = false;
         document.getElementById("moeAmount").innerHTML = toScientific(player.moe.toString());
-        document.getElementById("moeBonus").innerHTML = "+" + toScientific(player.moe.times(0.04).toString()) + "x";
+        document.getElementById("moeBonus").innerHTML = "+" + toScientific(player.moe.times(baseMoeBonus).toString()) + "x";
     }
 }
 
