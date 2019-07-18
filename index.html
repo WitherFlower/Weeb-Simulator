@@ -12,7 +12,11 @@
 </head>
 
 <body>
+    <div class="center">
+        <button id="largeuwuReset" onclick="uwuReset()" hidden=true>Otaku Rebirth</button>
+    </div>
     <h2 class="center" id="owo">You have 10 owo</h2>
+    <p class="center" id="owoGain">You are gaining 1337 owo per second</p>
     <div class="center">
         <p id="weebEssence" hidden=true>
             You have <span id="weebEssenceAmount">0</span> Weeb Essence, granting a <span id="weebEssenceBonus">0%</span> bonus on all of your generators.
@@ -24,69 +28,81 @@
         </p>
     </div>
     <div class="center">
-        <p id="upgradeMult">
-            Your multiplier per upgrade is currently <span id="upgradeMultiplier">1.15x</span>
+        <p>
+            <button class="owotabButton" onclick="showtab('generatorstab')">Generators</button>
+            <button class="uwuTabButton" id="uwuTabBtn" onclick="showtab('otakutab')" hidden=true>Otaku</button>
         </p>
     </div>
-    <table id="Generators">
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <th>Multiplier</th>
-                <th>Amount</th>
-                <th>Level</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>First owo generator</td>
-                <td id="owomult1">x1</td>
-                <td id="owoamount1">69</td>
-                <td id="owolvl1">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn1" onclick="buyOwOGen(1)">Upgrade for : 10</button></td>
-            </tr>
-            <tr>
-                <td>Second owo generator</td>
-                <td id="owomult2">x1</td>
-                <td id="owoamount2">69</td>
-                <td id="owolvl2">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn2" onclick="buyOwOGen(2)">Upgrade for : 10</button></td>
-            </tr>
-            <tr>
-                <td>Third owo generator</td>
-                <td id="owomult3">x1</td>
-                <td id="owoamount3">69</td>
-                <td id="owolvl3">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn3" onclick="buyOwOGen(3)">Upgrade for : 10</button></td>
-            </tr>
-            <tr>
-                <td>Fourth owo generator</td>
-                <td id="owomult4">x1</td>
-                <td id="owoamount4">69</td>
-                <td id="owolvl4">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn4" onclick="buyOwOGen(4)">Upgrade for : 10</button></td>
-            </tr>
-            <tr>
-                <td>Fifth owo generator</td>
-                <td id="owomult5">x1</td>
-                <td id="owoamount5">69</td>
-                <td id="owolvl5">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn5" onclick="buyOwOGen(5)">Upgrade for : 10</button></td>
-            </tr>
-            <tr>
-                <td>Sixth owo generator</td>
-                <td id="owomult6">x1</td>
-                <td id="owoamount6">69</td>
-                <td id="owolvl6">Lvl. 42</td>
-                <td><button class="buyGenerator" id="owobtn6" onclick="buyOwOGen(6)">Upgrade for : 10</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="center">
-        <button id="essenceReset" class="stdButton" hidden=true onclick="essenceReset()">Reset all generators and get 1 Weeb Essence</button>
+    <div id="generatorstab">
+        <div class="center">
+            <p id="upgradeMult">
+                Your multiplier per upgrade is currently <span id="upgradeMultiplier">1.15x</span>
+            </p>
+        </div>
+        <button class="stdButton small center" onclick="maxAllowo()">Max All</button>
+        <table id="Generators">
+            <tbody>
+                <tr>
+                    <th>Tier</th>
+                    <th>Multiplier</th>
+                    <th>Amount</th>
+                    <th>Level</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>First owo generator</td>
+                    <td id="owomult1">x1</td>
+                    <td id="owoamount1">69</td>
+                    <td id="owolvl1">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn1" onclick="buyOwOGen(1)">Upgrade for : 10</button></td>
+                </tr>
+                <tr>
+                    <td>Second owo generator</td>
+                    <td id="owomult2">x1</td>
+                    <td id="owoamount2">69</td>
+                    <td id="owolvl2">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn2" onclick="buyOwOGen(2)">Upgrade for : 10</button></td>
+                </tr>
+                <tr>
+                    <td>Third owo generator</td>
+                    <td id="owomult3">x1</td>
+                    <td id="owoamount3">69</td>
+                    <td id="owolvl3">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn3" onclick="buyOwOGen(3)">Upgrade for : 10</button></td>
+                </tr>
+                <tr>
+                    <td>Fourth owo generator</td>
+                    <td id="owomult4">x1</td>
+                    <td id="owoamount4">69</td>
+                    <td id="owolvl4">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn4" onclick="buyOwOGen(4)">Upgrade for : 10</button></td>
+                </tr>
+                <tr>
+                    <td>Fifth owo generator</td>
+                    <td id="owomult5">x1</td>
+                    <td id="owoamount5">69</td>
+                    <td id="owolvl5">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn5" onclick="buyOwOGen(5)">Upgrade for : 10</button></td>
+                </tr>
+                <tr>
+                    <td>Sixth owo generator</td>
+                    <td id="owomult6">x1</td>
+                    <td id="owoamount6">69</td>
+                    <td id="owolvl6">Lvl. 42</td>
+                    <td><button class="buyGenerator" id="owobtn6" onclick="buyOwOGen(6)">Upgrade for : 10</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="center">
+            <button id="essenceReset" class="stdButton" hidden=true onclick="essenceReset()">Reset all generators and get 1 Weeb Essence</button>
+        </div>
+        <br/>
+        <div class="center">
+            <button id="moeReset" class="stdButton" hidden=true onclick="moeReset()">Reset all generators and all Weeb Essence to get a Moe. <br />Cost : 1e50 owo</button>
+        </div>
     </div>
-    <br/>
-    <div class="center">
-        <button id="moeReset" class="stdButton" hidden=true onclick="moeReset()">Reset all generators and all Weeb Essence to get a Moe. <br />Cost : 1e50 owo</button>
+    <div id="otakutab" hidden=true>
+        <p>otaku tab stuff uwu</p>
     </div>
 </body>
 
