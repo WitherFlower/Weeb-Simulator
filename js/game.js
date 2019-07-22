@@ -153,6 +153,8 @@ function updateUwU() {
 function update() {
     if (!player.uwuGlitch) {
         updateOwO();
+    } else {
+        player.owo = new Decimal('1e400');
     }
     updateUwU();
 }
@@ -241,17 +243,9 @@ function displayMoeStuff() {
     displayMoeMult();
 }
 
-function displayuwuForcedReset() {
-    if (player.uwuGlitch) {
-        document.getElementById("largeuwuReset").hidden = false;
-    } else {
-        document.getElementById("largeuwuReset").hidden = true;
-    }
-}
 
-function displayuwuStuff() {
-    displayuwuForcedReset();
-}
+
+function displayuwuStuff() {}
 
 function display() {
     displayTabButtons();
