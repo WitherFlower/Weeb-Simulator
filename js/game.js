@@ -243,9 +243,16 @@ function displayMoeStuff() {
     displayMoeMult();
 }
 
+function displayuwuAmount() {
+    if (player.uwuReset) {
+        document.getElementById("uwuAmountDisplay").hidden = false;
+    }
+    document.getElementById("uwuAmount").innerHTML = toScientific(player.uwu.toString());
+}
 
-
-function displayuwuStuff() {}
+function displayuwuStuff() {
+    displayuwuAmount();
+}
 
 function display() {
     displayTabButtons();
