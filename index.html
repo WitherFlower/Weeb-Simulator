@@ -12,25 +12,41 @@
 </head>
 
 <body>
+
+    <div class="currency-display-container">
+        <div class="prestige-currency-div">
+            <div id="soonTM" hidden=true>
+                <p>Prestige yay</p>
+            </div>
+        </div>
+        <div class="main-currency-div">
+            <h2 class="center" id="owo">You have 10 owo</h2>
+            <p class="center" id="owoGain">You are gaining 1337 owo per second</p>
+            <div class="center">
+                <p id="weebEssence" hidden=true>
+                    You have <span id="weebEssenceAmount">0</span> Weeb Essence, granting a <span id="weebEssenceBonus">0%</span> bonus on all of your generators.
+                </p>
+            </div>
+            <div class="center">
+                <p id="moeMult" hidden=true>
+                    You have <span id="moeAmount">0</span> Moe, granting a <span id="moeBonus">+0.04x</span> multiplier per upgrade.
+                </p>
+            </div>
+        </div>
+        <div class="prestige-currency-div">
+            <div id="uwuAmountDisplay" hidden=true>
+                <p id="uwuAmountDisplayText">You have <span id="uwuAmount">7777</span> uwu</p>
+            </div>
+        </div>
     </div>
-    <h2 class="center" id="owo">You have 10 owo</h2>
-    <p class="center" id="owoGain">You are gaining 1337 owo per second</p>
-    <div class="center">
-        <p id="weebEssence" hidden=true>
-            You have <span id="weebEssenceAmount">0</span> Weeb Essence, granting a <span id="weebEssenceBonus">0%</span> bonus on all of your generators.
-        </p>
-    </div>
-    <div class="center">
-        <p id="moeMult" hidden=true>
-            You have <span id="moeAmount">0</span> Moe, granting a <span id="moeBonus">+0.04x</span> multiplier per upgrade.
-        </p>
-    </div>
+
     <div class="center">
         <p>
             <button class="owotabButton" onclick="showtab('generatorstab')">Generators</button>
             <button class="uwuTabButton" id="uwuTabBtn" onclick="showtab('otakutab')" hidden=true>Otaku</button>
         </p>
     </div>
+
     <div id="generatorstab">
         <div class="center">
             <p id="upgradeMult">
