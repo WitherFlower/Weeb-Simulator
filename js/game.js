@@ -141,9 +141,9 @@ function uwuReset() {
 
 function updateOwO() {
     for (i = 6; i > 1; i--) {
-        player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(33))
+        player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(100 / 30))
     }
-    player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(33));
+    player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(1000 / 30));
 }
 
 function updateUwU() {
@@ -187,6 +187,11 @@ function displayOwOGenerators() {
         document.getElementById("owoamount" + i).innerHTML = toScientific(player.owoGenerators[i - 1].amount.toString());
         document.getElementById("owolvl" + i).innerHTML = "Lvl. " + toScientific(player.owoGenerators[i - 1].level.toString());
         document.getElementById("owobtn" + i).innerHTML = "Upgrade for :  " + toScientific(player.owoGenerators[i - 1].cost.toString());
+        if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
+            document.getElementById("owobtn" + i).disabled = false;
+        } else {
+            document.getElementById("owobtn" + i).disabled = true;
+        }
     }
 }
 
@@ -194,6 +199,11 @@ function displayEssenceGain() {
     document.getElementById("essenceReset").innerHTML = "Reset all generators and get " + toScientific(getEssenceGain().toString()) + " Weeb Essence";
     if (player.owo.gte('1e12') || player.essenceReset) {
         document.getElementById("essenceReset").hidden = false;
+    }
+    if (Decimal.equals(getEssenceGain(), 0)) {
+        document.getElementById("essenceReset").disabled = true;
+    } else {
+        document.getElementById("essenceReset").disabled = false;
     }
     if (player.uwuGlitch) {
         document.getElementById("essenceReset").hidden = true;
@@ -217,8 +227,12 @@ function displayEssenceStuff() {
 }
 
 function displayMoeButton() {
-    if (player.owo.gte('1e50') || player.moeReset) {
+    if (player.owo.gte('1e50') || player.moeReset) { // Enable
         document.getElementById("moeReset").hidden = false;
+        document.getElementById("moeReset").disabled = false;
+    }
+    if (!player.owo.gte('1e50')) { // Disable
+        document.getElementById("moeReset").disabled = true;
     }
     document.getElementById("moeReset").innerHTML = "Reset all generators and all Weeb Essence to get a Moe. <br />Cost : " + toScientific(getMoeResetCost().toString()) + " owo";
     if (player.uwuGlitch) {
@@ -310,7 +324,6 @@ window.addEventListener('keydown', function(event) {
     }
 }, false);
 
-
 //String Formatting
 
 function toScientific(string) {
@@ -330,5 +343,5 @@ function toScientific(string) {
 
 
 init();
-setInterval(gameLoop, 33);
+setInterval(gameLoop, 1000 / 30);
 setInterval(save, 30000);
