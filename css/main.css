@@ -16,7 +16,7 @@ button:focus {
 }
 
 body {
-    background-color: #262933;
+    background-color: #252525;
     color: lightgrey;
 }
 
@@ -93,13 +93,17 @@ td {
     background-color: lightgray;
 }
 
+.buyGenerator:disabled {
+    background: gray;
+}
+
 .stdButton {
     max-width: 350px;
     width: flex;
     height: flex;
     padding: 10px;
     font-size: 18px;
-    background-color: transparent;
+    background-color: rgb(250, 157, 172);
     color: black;
     border: 2px solid black;
     border-radius: 5px;
@@ -117,6 +121,10 @@ td {
 
 .stdButton:active {
     background-color: lightgray;
+}
+
+.stdButton:disabled {
+    background: gray;
 }
 
 #uwuReset {
