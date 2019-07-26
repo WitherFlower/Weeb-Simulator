@@ -71,6 +71,18 @@ td {
 }
 
 
+/* Waifu Stuff */
+
+#getWaifu {
+    margin: 10px;
+}
+
+.dere-container {
+    height: flex;
+    width: 20%;
+}
+
+
 /* Button stuff */
 
 .buyGenerator {
@@ -124,7 +136,7 @@ td {
 }
 
 .stdButton:disabled {
-    background: gray;
+    background-color: gray;
 }
 
 #uwuReset {
@@ -132,16 +144,21 @@ td {
     height: flex;
     font-size: 20px;
     padding: 10px;
-    border: 3px solid rgb(0, 255, 0);
+    border: 3px solid #2fe92f;
     background-color: rgb(205, 253, 205);
-    color: rgb(0, 255, 0);
-    border-radius: 10px;
+    color: #2fe92f;
+    border-radius: 5px;
     transition-duration: 0.4s;
 }
 
 #uwuReset:hover {
-    background-color: rgb(0, 255, 0);
+    background-color: #2fe92f;
     color: rgb(205, 253, 205);
+}
+
+#uwuReset:disabled {
+    background-color: gray;
+    color: #2fe92f;
 }
 
 
@@ -194,9 +211,10 @@ td {
     padding: 10px;
 }
 
+#weebEssence,
 #moeMult,
 #upgradeMult,
-#weebEssence {
+#waifuAmount {
     font-size: 18px;
     margin: 5px;
 }
@@ -218,7 +236,15 @@ td {
 
 #uwuAmount {
     color: #2fe92f;
-    text-shadow: 0px 0px 5px black;
+    font-weight: bold;
+    text-shadow: 0px 0px 5px #1a811a;
+    font-size: 20px;
+}
+
+#totalWaifuAmount,
+#availableWaifuAmount {
+    color: #6b6b6b;
+    font-weight: bold;
     font-size: 20px;
 }
 
