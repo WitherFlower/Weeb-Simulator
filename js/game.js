@@ -8,6 +8,7 @@ let player = {
     uwu: new Decimal('0'),
     uwuReset: false,
     uwuGlitch: false,
+    waifu: {},
 };
 
 let baseowoUpgradeMult = 1.15;
@@ -108,7 +109,7 @@ function getMoeResetCost() {
 // uwu Stuff
 
 function checkuwuReset() {
-    if (player.owo.gte('1e400')) {
+    if (player.owo.gte('1e400') && player.uwuReset == false) {
         player.uwuGlitch = true;
     } else {
         player.uwuGlitch = false;
@@ -116,15 +117,51 @@ function checkuwuReset() {
 }
 
 function uwuReset() {
-    player.owo = new Decimal(10);
-    player.uwuReset = true;
-    player.uwu = player.uwu.add(1);
-    player.uwuGlitch = false;
-    player.moe = new Decimal(0);
-    player.weebEssence = new Decimal(0);
-    player.owoGenerators = getOwOGenerators();
-    for (let i = 1; i <= 6; i++) {
-        updateOwOGenMult(i)
+    if (getuwuGain().gte(1)) {
+        player.owo = new Decimal(10);
+        player.uwuReset = true;
+        player.uwu = player.uwu.add(1);
+        player.uwuGlitch = false;
+        player.moe = new Decimal(0);
+        player.weebEssence = new Decimal(0);
+        player.owoGenerators = getOwOGenerators();
+        for (let i = 1; i <= 6; i++) {
+            updateOwOGenMult(i)
+        }
+    }
+}
+
+function getuwuGain() {
+    let gain = new Decimal(Decimal.pow(5, player.owo.log10().minus(400).div(70)).sqrt());
+    gain = Decimal.max(Decimal.floor(gain), 0);
+    return gain;
+}
+
+//Waifu Stuff
+
+//init function
+
+function getWaifuStuff() {
+    let w = {
+        total: new Decimal(0),
+        available: new Decimal(0),
+        tsundere: new Decimal(0),
+        dandere: new Decimal(0),
+        yandere: new Decimal(0),
+    };
+    return w;
+}
+
+function getWaifuCost() {
+    let cost = Decimal.pow(1.5, player.waifu.total).floor();
+    return cost;
+}
+
+function getWaifu() {
+    if (player.uwu.gte(getWaifuCost())) {
+        player.uwu = player.uwu.minus(getWaifuCost());
+        player.waifu.total = player.waifu.total.add(1);
+        player.waifu.available = player.waifu.available.add(1);
     }
 }
 
@@ -163,7 +200,7 @@ function update() {
 
 function showtab(tabName) {
     document.getElementById("generatorstab").hidden = true;
-    document.getElementById("otakutab").hidden = true;
+    document.getElementById("rebirthtab").hidden = true;
     document.getElementById(tabName).hidden = false;
 }
 
@@ -264,8 +301,40 @@ function displayuwuAmount() {
     document.getElementById("uwuAmount").innerHTML = toScientific(player.uwu.toString());
 }
 
+function displayuwuGain() {
+    document.getElementById("uwuGain").innerHTML = toScientific(getuwuGain().toString());
+    if (Decimal.equals(getuwuGain(), 0)) {
+        document.getElementById("uwuReset").disabled = true;
+    } else {
+        document.getElementById("uwuReset").disabled = false;
+    }
+}
+
 function displayuwuStuff() {
     displayuwuAmount();
+    displayuwuGain();
+}
+
+function displayWaifuCost() {
+    document.getElementById("getWaifu").innerHTML = "Get a Waifu<br />Cost: " + toScientific(getWaifuCost().toString()) + " uwu";
+    if (!player.uwu.gte(getWaifuCost())) {
+        document.getElementById("getWaifu").disabled = true;
+    } else {
+        document.getElementById("getWaifu").disabled = false;
+    }
+}
+
+function displayWaifuAmounts() {
+    document.getElementById("totalWaifuAmount").innerHTML = toScientific(player.waifu.total.toString());
+    document.getElementById("availableWaifuAmount").innerHTML = toScientific(player.waifu.available.toString());
+    // document.getElementById("getWaifu").innerHTML = 
+    // document.getElementById("getWaifu").innerHTML = 
+    // document.getElementById("getWaifu").innerHTML = 
+}
+
+function displayWaifuStuff() {
+    displayWaifuCost();
+    displayWaifuAmounts();
 }
 
 function display() {
@@ -279,6 +348,7 @@ function display() {
     displayMoeStuff();
     displayUpgradeMult();
     displayuwuStuff();
+    displayWaifuStuff();
 }
 
 function gameLoop() {
@@ -288,6 +358,7 @@ function gameLoop() {
 
 function init() {
     player.owoGenerators = getOwOGenerators();
+    player.waifu = getWaifuStuff();
     if (localStorage.getItem("Weeb-Simulator-playerdata") != null) {
         loadSave();
     }
@@ -306,6 +377,11 @@ function loadSave() {
     player.weebEssence = new Decimal(player.weebEssence);
     player.moe = new Decimal(player.moe);
     player.uwu = new Decimal(player.uwu);
+    player.waifu.total = new Decimal(player.waifu.total);
+    player.waifu.available = new Decimal(player.waifu.available);
+    player.waifu.tsundere = new Decimal(player.waifu.tsundere);
+    player.waifu.dandere = new Decimal(player.waifu.dandere);
+    player.waifu.yandere = new Decimal(player.waifu.yandere);
 }
 
 function save() {
