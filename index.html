@@ -16,7 +16,7 @@
     <div class="currency-display-container">
         <div class="prestige-currency-div">
             <div id="soonTM" hidden=true>
-                <p>Prestige yay</p>
+                <p>Prestige #2 yay</p>
             </div>
         </div>
         <div class="main-currency-div">
@@ -37,13 +37,16 @@
             <div id="uwuAmountDisplay" hidden=true>
                 <p id="uwuAmountDisplayText">You have <span id="uwuAmount">7777</span> uwu</p>
             </div>
+            <div class="center">
+                <button id="uwuReset" class="stdButton" onclick="uwuReset()">Rebirth and gain <span id="uwuGain"></span> uwu</button>
+            </div>
         </div>
     </div>
 
     <div class="center">
         <p>
             <button class="owotabButton" onclick="showtab('generatorstab')">Generators</button>
-            <button class="uwuTabButton" id="uwuTabBtn" onclick="showtab('otakutab')" hidden=true>Otaku</button>
+            <button class="uwuTabButton" id="uwuTabBtn" onclick="showtab('rebirthtab')" hidden=true>Rebirth</button>
         </p>
     </div>
 
@@ -115,9 +118,25 @@
             <button id="moeReset" class="stdButton" hidden=true disabled=true onclick="moeReset()">Reset all generators and all Weeb Essence to get a Moe. <br />Cost : 1e50 owo</button>
         </div>
     </div>
-    <div id="otakutab" hidden=true>
+    <div id="rebirthtab" hidden=true>
         <div class="center">
-            <button id="uwuReset" onclick="uwuReset()">Rebirth and gain <span id="uwuGain"></span> uwu</button>
+            <p id="waifuAmount">
+                You currently have <span id="totalWaifuAmount">808</span> Waifus, with <span id="availableWaifuAmount">404</span> not being assigned to a dere type.
+            </p>
+        </div>
+        <div class="center">
+            <button id="getWaifu" class="stdButton" onclick="getWaifu()">Get a Waifu<br />Cost: 399 uwu</button>
+        </div>
+        <div class="center">
+            <div class="dere-container">
+                <p class="center">Tsundere</p>
+            </div>
+            <div class="dere-container">
+                <p class="center">Dandere</p>
+            </div>
+            <div class="dere-container">
+                <p class="center">Yandere</p>
+            </div>
         </div>
     </div>
 </body>
