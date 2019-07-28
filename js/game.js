@@ -13,7 +13,7 @@ let player = {
 
 let baseowoUpgradeMult = 1.15;
 let baseMoeBonus = 0.03;
-let baseEssenceBonus = 0.2;
+let baseEssenceBonus = 0.15;
 
 // owo Stuff
 
@@ -31,6 +31,12 @@ function buyOwOGen(i) {
 
 function updateOwOGenMult(i) {
     player.owoGenerators[i - 1].mult = getowoUpgradeMult().pow(player.owoGenerators[i - 1].level).times(getEssenceMult());
+}
+
+function updateAllOwOGenMults() {
+    for (let i = 1; i <= 6; i++) {
+        updateOwOGenMult(i);
+    }
 }
 
 function updateOwOGenCost(i) {
@@ -165,6 +171,26 @@ function getWaifu() {
     }
 }
 
+function assignWaifu(type) {
+    switch (type) {
+        case 'Tsundere':
+            if (player.waifu.available.equals(0)) break;
+            else player.waifu.tsundere = player.waifu.tsundere.add(1);
+            player.waifu.available = player.waifu.available.minus(1);
+            break;
+        case 'Dandere':
+            if (player.waifu.available.equals(0)) break;
+            else player.waifu.dandere = player.waifu.dandere.add(1);
+            player.waifu.available = player.waifu.available.minus(1);
+            break;
+        case 'Yandere':
+            if (player.waifu.available.equals(0)) break;
+            else player.waifu.yandere = player.waifu.yandere.add(1);
+            player.waifu.available = player.waifu.available.minus(1);
+            break;
+    }
+}
+
 // function auto() {
 //     for (let i = 1; i <= 6; i++) {
 //         if (player.owo.gte(player.owoGenerators[i - 1].cost)) {
@@ -180,6 +206,7 @@ function updateOwO() {
     for (i = 6; i > 1; i--) {
         player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(100 / 30))
     }
+    updateAllOwOGenMults()
     player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(1000 / 30));
 }
 
@@ -327,14 +354,27 @@ function displayWaifuCost() {
 function displayWaifuAmounts() {
     document.getElementById("totalWaifuAmount").innerHTML = toScientific(player.waifu.total.toString());
     document.getElementById("availableWaifuAmount").innerHTML = toScientific(player.waifu.available.toString());
-    // document.getElementById("getWaifu").innerHTML = 
-    // document.getElementById("getWaifu").innerHTML = 
-    // document.getElementById("getWaifu").innerHTML = 
+    document.getElementById("tsundereAmount").innerHTML = toScientific(player.waifu.tsundere.toString());
+    document.getElementById("dandereAmount").innerHTML = toScientific(player.waifu.dandere.toString());
+    document.getElementById("yandereAmount").innerHTML = toScientific(player.waifu.yandere.toString());
+}
+
+function displayWaifuButtons() {
+    if (player.waifu.available.equals(0)) {
+        document.getElementById("assignTsundere").disabled = true;
+        document.getElementById("assignDandere").disabled = true;
+        document.getElementById("assignYandere").disabled = true;
+    } else {
+        document.getElementById("assignTsundere").disabled = false;
+        document.getElementById("assignDandere").disabled = false;
+        document.getElementById("assignYandere").disabled = false;
+    }
 }
 
 function displayWaifuStuff() {
     displayWaifuCost();
     displayWaifuAmounts();
+    displayWaifuButtons();
 }
 
 function display() {
