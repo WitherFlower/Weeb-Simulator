@@ -154,6 +154,7 @@ function getWaifuStuff() {
         tsundere: new Decimal(0),
         dandere: new Decimal(0),
         yandere: new Decimal(0),
+        upgrades: [],
     };
     return w;
 }
@@ -187,6 +188,33 @@ function assignWaifu(type) {
             if (player.waifu.available.equals(0)) break;
             else player.waifu.yandere = player.waifu.yandere.add(1);
             player.waifu.available = player.waifu.available.minus(1);
+            break;
+    }
+}
+
+function buyWaifuUpgrade(upgradeID) {
+    switch (upgradeID.charAt(0)) {
+        case 'T':
+            if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                    player.waifu.upgrades.push(upgradeID); // enlève les uwu dépensés dans l'upgrade et fais la truc de display aussi, puis ensuite les effets des upgrades sur paint et enfin le cost scaling
+                }
+            }
+            break;
+        case 'D':
+            if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                    player.waifu.upgrades.push(upgradeID);
+                }
+            }
+            break;
+
+        case 'Y':
+            if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                    player.waifu.upgrades.push(upgradeID);
+                }
+            }
             break;
     }
 }

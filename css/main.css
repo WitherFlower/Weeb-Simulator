@@ -161,6 +161,24 @@ td {
     color: #2fe92f;
 }
 
+.waifuUpgrade {
+    width: 120px;
+    height: 90px;
+    margin: 5px;
+}
+
+.tsundereUpgrade {
+    background-color: #f3532b;
+}
+
+.dandereUpgrade {
+    background-color: #2bbaf3;
+}
+
+.yandereUpgrade {
+    background-color: #992bf3;
+}
+
 
 /* Tab buttons */
 
