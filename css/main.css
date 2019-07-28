@@ -211,10 +211,16 @@ td {
     padding: 10px;
 }
 
-#weebEssence,
+
+/* #weebEssence,
 #moeMult,
 #upgradeMult,
 #waifuAmount {
+    font-size: 18px;
+    margin: 5px;
+} */
+
+.generalCurrencyText {
     font-size: 18px;
     margin: 5px;
 }
@@ -239,6 +245,24 @@ td {
     font-weight: bold;
     text-shadow: 0px 0px 5px #1a811a;
     font-size: 20px;
+}
+
+#tsundereAmount {
+    color: #f3532b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#dandereAmount {
+    color: #2bbaf3;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#yandereAmount {
+    color: #992bf3;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 #totalWaifuAmount,
