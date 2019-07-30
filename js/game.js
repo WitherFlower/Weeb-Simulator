@@ -154,7 +154,7 @@ function getWaifuStuff() {
         tsundere: new Decimal(0),
         dandere: new Decimal(0),
         yandere: new Decimal(0),
-        upgrades: [],
+        upgrades: new Array(),
     };
     return w;
 }
@@ -198,6 +198,7 @@ function buyWaifuUpgrade(upgradeID) {
             if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                 if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
                     player.waifu.upgrades.push(upgradeID); // enlève les uwu dépensés dans l'upgrade et fais la truc de display aussi, puis ensuite les effets des upgrades sur paint et enfin le cost scaling
+                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
                 }
             }
             break;
@@ -205,6 +206,7 @@ function buyWaifuUpgrade(upgradeID) {
             if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                 if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
                     player.waifu.upgrades.push(upgradeID);
+                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
                 }
             }
             break;
@@ -213,6 +215,7 @@ function buyWaifuUpgrade(upgradeID) {
             if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                 if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
                     player.waifu.upgrades.push(upgradeID);
+                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
                 }
             }
             break;
@@ -323,7 +326,7 @@ function displayMoeButton() {
         document.getElementById("moeReset").hidden = false;
         document.getElementById("moeReset").disabled = false;
     }
-    if (!player.owo.gte('1e50')) { // Disable
+    if (!player.owo.gte(getMoeResetCost())) { // Disable
         document.getElementById("moeReset").disabled = true;
     }
     document.getElementById("moeReset").innerHTML = "Reset all generators and all Weeb Essence to get a Moe. <br />Cost : " + toScientific(getMoeResetCost().toString()) + " owo";
@@ -399,10 +402,49 @@ function displayWaifuButtons() {
     }
 }
 
+function displayWaifuUpgrades() {
+    for (let upgradeID of getAllWaifuUpgradesIDs()) {
+        switch (upgradeID.charAt(0)) {
+            case 'T':
+                if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    document.getElementById(upgradeID).disabled = false;
+                    // document.getElementById(upgradeID).innerHTML = getWaifuUpgradeDescription(upgradeID) + "<br />Cost : " + getWaifuUpgradeCost(upgradeID) + " uwu";
+                } else {
+                    document.getElementById(upgradeID).disabled = true;
+                    document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
+                }
+                if (player.waifu.upgrades.includes(upgradeID))
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade tsundereUpgradeBought";
+                break;
+            case 'D':
+                if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    document.getElementById(upgradeID).disabled = false;
+                } else {
+                    document.getElementById(upgradeID).disabled = true;
+                    document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
+                }
+                if (player.waifu.upgrades.includes(upgradeID))
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade dandereUpgradeBought";
+                break;
+            case 'Y':
+                if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    document.getElementById(upgradeID).disabled = false;
+                } else {
+                    document.getElementById(upgradeID).disabled = true;
+                    document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
+                }
+                if (player.waifu.upgrades.includes(upgradeID))
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade yandereUpgradeBought";
+                break;
+        }
+    }
+}
+
 function displayWaifuStuff() {
     displayWaifuCost();
     displayWaifuAmounts();
     displayWaifuButtons();
+    displayWaifuUpgrades();
 }
 
 function display() {
@@ -450,6 +492,7 @@ function loadSave() {
     player.waifu.tsundere = new Decimal(player.waifu.tsundere);
     player.waifu.dandere = new Decimal(player.waifu.dandere);
     player.waifu.yandere = new Decimal(player.waifu.yandere);
+    // player.waifu.upgrades = new Array(player.waifu.upgrades);
 }
 
 function save() {

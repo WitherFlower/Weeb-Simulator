@@ -80,6 +80,7 @@ td {
 .dere-container {
     height: flex;
     width: 20%;
+    padding: 20px;
 }
 
 
@@ -162,20 +163,29 @@ td {
 }
 
 .waifuUpgrade {
-    width: 120px;
-    height: 90px;
+    width: 200px;
+    height: 120px;
     margin: 5px;
 }
 
-.tsundereUpgrade {
+.tsundereUpgrade,
+.tsundereUpgradeBought,
+.tsundereUpgradeBought:hover,
+.tsundereUpgradeBought:active {
     background-color: #f3532b;
 }
 
-.dandereUpgrade {
+.dandereUpgrade,
+.dandereUpgradeBought,
+.dandereUpgradeBought:hover,
+.dandereUpgradeBought:active {
     background-color: #2bbaf3;
 }
 
-.yandereUpgrade {
+.yandereUpgrade,
+.yandereUpgradeBought,
+.yandereUpgradeBought:hover,
+.yandereUpgradeBought:active {
     background-color: #992bf3;
 }
 
