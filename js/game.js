@@ -11,9 +11,9 @@ let player = {
     waifu: {},
 };
 
-let baseowoUpgradeMult = 1.15;
-let baseMoeBonus = 0.03;
-let baseEssenceBonus = 0.15;
+const baseowoUpgradeMult = 1.15;
+const baseMoeBonus = 0.03;
+const baseEssenceBonus = 0.15;
 
 // owo Stuff
 
@@ -40,7 +40,37 @@ function updateAllOwOGenMults() {
 }
 
 function updateOwOGenCost(i) {
-    player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.1, i * i * 0.1))));
+    // player.owoGenerators[i - 1].cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(Decimal.add(0.1, Decimal.times(i * i, Decimal.add(0.1, Decimal.max(player.owoGenerators[i - 1].level.minus(getowoGenScalingLevel()).div(100), 0)))))));
+    let addedLog = Decimal.add(0.1, i * i * 0.1);
+    let addedScalingLog = Decimal.max(0, player.owoGenerators[i - 1].level.minus(getowoGenScalingLevel(i))).div(100);
+    let cost = Decimal.pow(10, (player.owoGenerators[i - 1].cost.log10().add(addedLog).add(addedScalingLog)));
+    player.owoGenerators[i - 1].cost = cost;
+}
+
+function getowoGenScalingLevel(i) {
+    // let l = 2000 * i * Math.pow(i, -2.42); // <-- That is an attempt of getting the scaling with a function but it's meh, so instead I'm going to make dirty code stuff again...
+    // return new Decimal(l);
+    switch (i) {
+        case 1:
+            return new Decimal(2000);
+            break;
+        case 2:
+            return new Decimal(800);
+            break;
+        case 3:
+            return new Decimal(400);
+            break;
+        case 4:
+            return new Decimal(250);
+            break;
+        case 5:
+            return new Decimal(150);
+            break;
+        case 6:
+            return new Decimal(100);
+            break;
+    }
+    // return new Decimal(0); Maybe some day we'll have more generators ¯\_(ツ)_/¯
 }
 
 function getowoUpgradeMult() {
