@@ -2,7 +2,7 @@
 
 owo
 
-This is an incremental game project about becoming a weeb by collecting owo
+This is an incremental game project about collecting owo
 
 **Notes :**
 
