@@ -1,4 +1,5 @@
 let player = {
+    startDate: 0,
     owo: new Decimal('10'),
     owoGenerators: {},
     weebEssence: new Decimal('0'),
@@ -8,12 +9,13 @@ let player = {
     uwu: new Decimal('0'),
     uwuReset: false,
     uwuGlitch: false,
+    rebirthAmount: new Decimal('0'),
     waifu: {},
 };
 
-const baseowoUpgradeMult = 1.15;
-const baseMoeBonus = 0.03;
-const baseEssenceBonus = 0.15;
+let baseowoUpgradeMult = 1.15;
+let baseMoeBonus = 0.03;
+let baseEssenceEffect = 0.15;
 
 // owo Stuff
 
@@ -30,7 +32,11 @@ function buyOwOGen(i) {
 }
 
 function updateOwOGenMult(i) {
-    player.owoGenerators[i - 1].mult = getowoUpgradeMult().pow(player.owoGenerators[i - 1].level).times(getEssenceMult());
+    let mult = getowoUpgradeMult().pow(player.owoGenerators[i - 1].level).times(getEssenceMult())
+    if (player.waifu.upgrades.includes('T1')) mult = mult.times(getWaifuT1Effect());
+    if (player.waifu.upgrades.includes('T2')) mult = mult.times(getWaifuT2Effect());
+    if (player.waifu.upgrades.includes('T3')) mult = mult.times(getWaifuT3Effect());
+    player.owoGenerators[i - 1].mult = mult;
 }
 
 function updateAllOwOGenMults() {
@@ -74,7 +80,7 @@ function getowoGenScalingLevel(i) {
 }
 
 function getowoUpgradeMult() {
-    let mult = new Decimal(baseowoUpgradeMult).add(player.moe.times(baseMoeBonus));
+    let mult = new Decimal(baseowoUpgradeMult).add(player.moe.times(getMoeBonus()));
     return mult;
 }
 
@@ -91,8 +97,14 @@ function maxAllowo() {
 // Essence Stuff
 
 function getEssenceGain() {
+    if (player.waifu.upgrades.includes('D3')) {
+        let gain = Decimal.pow(10, Decimal.max(player.owo.log10(), 1).sqrt());
+        if (player.waifu.upgrades.includes('D2')) gain = gain.times(5);
+        return gain;
+    }
     if (player.owo.gte('1e12')) {
         let gain = player.owo.log10().minus(11).times(player.owo.log10().minus(11)).floor();
+        if (player.waifu.upgrades.includes('D2')) gain = gain.times(5);
         return gain;
     } else {
         return 0;
@@ -100,7 +112,7 @@ function getEssenceGain() {
 }
 
 function essenceReset() {
-    if (player.owo.gte('1e12')) {
+    if (getEssenceGain().gte(1)) {
         player.weebEssence = player.weebEssence.add(getEssenceGain())
         player.owo = new Decimal(10);
         player.owoGenerators = getOwOGenerators();
@@ -111,8 +123,15 @@ function essenceReset() {
     player.essenceReset = true;
 }
 
+function getEssenceEffect() {
+    let effect = baseEssenceEffect;
+    if (player.waifu.upgrades.includes('D1')) effect = 0.25;
+    if (player.waifu.upgrades.includes('Y4')) effect = Decimal.add(effect, Decimal.pow(2, player.moe).div(200));
+    return effect;
+}
+
 function getEssenceMult() {
-    let mult = player.weebEssence.times(baseEssenceBonus).add(1);
+    let mult = player.weebEssence.times(getEssenceEffect()).add(1);
     return mult;
 }
 
@@ -139,7 +158,14 @@ function moeReset() {
 
 function getMoeResetCost() {
     let cost = Decimal.pow(10, Decimal.add(50, Decimal.times(50, player.moe.times(player.moe.add(1)).div(2))));
+    if (player.waifu.upgrades.includes('Y2')) cost = Decimal.pow(10, cost.log10().times(0.9));
     return cost;
+}
+
+function getMoeBonus() {
+    let bonus = baseMoeBonus;
+    if (player.waifu.upgrades.includes('Y3')) bonus = 0.04;
+    return bonus;
 }
 
 // uwu Stuff
@@ -154,11 +180,17 @@ function checkuwuReset() {
 
 function uwuReset() {
     if (getuwuGain().gte(1)) {
+        if (!player.uwuReset) {
+            player.waifu.total = new Decimal(1);
+            player.waifu.available = new Decimal(1);
+        }
+        player.rebirthAmount = player.rebirthAmount.add(1);
         player.owo = new Decimal(10);
         player.uwuReset = true;
         player.uwu = player.uwu.add(1);
         player.uwuGlitch = false;
         player.moe = new Decimal(0);
+        if (player.waifu.upgrades.includes('Y1')) player.moe = new Decimal(1);
         player.weebEssence = new Decimal(0);
         player.owoGenerators = getOwOGenerators();
         for (let i = 1; i <= 6; i++) {
@@ -168,7 +200,9 @@ function uwuReset() {
 }
 
 function getuwuGain() {
-    let gain = new Decimal(Decimal.pow(5, player.owo.log10().minus(400).div(70)).sqrt());
+    let owoExponentRequirement = 400;
+    if (player.waifu.upgrades.includes('T4')) owoExponentRequirement = 300;
+    let gain = new Decimal(Decimal.pow(5, player.owo.log10().minus(owoExponentRequirement).div(70)).sqrt());
     gain = Decimal.max(Decimal.floor(gain), 0);
     return gain;
 }
@@ -196,9 +230,13 @@ function getWaifuCost() {
 
 function getWaifu() {
     if (player.uwu.gte(getWaifuCost())) {
-        player.uwu = player.uwu.minus(getWaifuCost());
-        player.waifu.total = player.waifu.total.add(1);
-        player.waifu.available = player.waifu.available.add(1);
+        if (player.waifu.upgrades.length == 0) {
+            alert("You need to assign 1 waifu to a branch to unlock an upgrade before buying more.")
+        } else {
+            player.uwu = player.uwu.minus(getWaifuCost());
+            player.waifu.total = player.waifu.total.add(1);
+            player.waifu.available = player.waifu.available.add(1);
+        }
     }
 }
 
@@ -223,33 +261,57 @@ function assignWaifu(type) {
 }
 
 function buyWaifuUpgrade(upgradeID) {
-    switch (upgradeID.charAt(0)) {
-        case 'T':
-            if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
-                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
-                    player.waifu.upgrades.push(upgradeID); // enlève les uwu dépensés dans l'upgrade et fais la truc de display aussi, puis ensuite les effets des upgrades sur paint et enfin le cost scaling
-                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
+    if (!player.waifu.upgrades.includes(upgradeID)) {
+        switch (upgradeID.charAt(0)) {
+            case 'T':
+                if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                        player.waifu.upgrades.push(upgradeID); // c'est bon // enlève les uwu dépensés dans l'upgrade et fais la truc de display aussi, puis ensuite les effets des upgrades sur paint et enfin le cost scaling
+                        player.uwu = player.uwu.minus(getWaifuUpgradeCost(upgradeID));
+                    }
                 }
-            }
-            break;
-        case 'D':
-            if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
-                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
-                    player.waifu.upgrades.push(upgradeID);
-                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
+                break;
+            case 'D':
+                if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                        player.waifu.upgrades.push(upgradeID);
+                        player.uwu = player.uwu.minus(getWaifuUpgradeCost(upgradeID));
+                    }
                 }
-            }
-            break;
+                break;
 
-        case 'Y':
-            if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
-                if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
-                    player.waifu.upgrades.push(upgradeID);
-                    player.uwu = player.uwu.minus(player.uwu.gte(getWaifuUpgradeCost(upgradeID)));
+            case 'Y':
+                if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
+                    if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
+                        player.waifu.upgrades.push(upgradeID);
+                        player.uwu = player.uwu.minus(getWaifuUpgradeCost(upgradeID));
+                    }
                 }
-            }
-            break;
+                break;
+        }
     }
+}
+
+function getWaifuT1Effect() {
+    let timeElapsed = Date.now() - player.startDate;
+    let secondstimeElapsed = Decimal.floor(timeElapsed / 1000);
+    return Decimal.log10(secondstimeElapsed).div(2);
+}
+
+function getWaifuT2Effect() {
+    return player.rebirthAmount.pow(1.5);
+}
+
+function getTotalowoLevels() {
+    let levels = new Decimal(0);
+    for (let g of player.owoGenerators) {
+        levels = levels.add(g.level)
+    }
+    return levels;
+}
+
+function getWaifuT3Effect() {
+    return getTotalowoLevels().div(10).add(1);
 }
 
 // function auto() {
@@ -265,10 +327,14 @@ function buyWaifuUpgrade(upgradeID) {
 
 function updateOwO() {
     for (i = 6; i > 1; i--) {
-        player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(100 / 30))
+        player.owoGenerators[i - 2].amount = player.owoGenerators[i - 2].amount.add(player.owoGenerators[i - 1].amount.times(player.owoGenerators[i - 1].mult).div(1000 / 30))
     }
     updateAllOwOGenMults()
     player.owo = player.owo.add(player.owoGenerators[0].amount.times(player.owoGenerators[0].mult).div(1000 / 30));
+}
+
+function updateEssence() {
+    player.weebEssence = player.weebEssence.add(getEssenceGain().div(1000).div(1000 / 30));
 }
 
 function updateUwU() {
@@ -281,6 +347,7 @@ function update() {
     } else {
         player.owo = new Decimal('1e400');
     }
+    if (player.waifu.upgrades.includes('D4')) updateEssence();
     updateUwU();
 }
 
@@ -369,7 +436,7 @@ function displayMoeMult() {
     if (player.moeReset) {
         document.getElementById("moeMult").hidden = false;
         document.getElementById("moeAmount").innerHTML = toScientific(player.moe.toString());
-        document.getElementById("moeBonus").innerHTML = "+" + toScientific(player.moe.times(baseMoeBonus).toString()) + "x";
+        document.getElementById("moeBonus").innerHTML = "+" + toScientific(player.moe.times(getMoeBonus()).toString()) + "x";
     }
 }
 
@@ -390,11 +457,16 @@ function displayuwuAmount() {
 }
 
 function displayuwuGain() {
-    document.getElementById("uwuGain").innerHTML = toScientific(getuwuGain().toString());
-    if (Decimal.equals(getuwuGain(), 0)) {
-        document.getElementById("uwuReset").disabled = true;
+    if (player.uwuReset || player.owo.gte('1e400')) {
+        document.getElementById("uwuReset").hidden = false;
+        document.getElementById("uwuGain").innerHTML = toScientific(getuwuGain().toString());
+        if (Decimal.equals(getuwuGain(), 0)) {
+            document.getElementById("uwuReset").disabled = true;
+        } else {
+            document.getElementById("uwuReset").disabled = false;
+        }
     } else {
-        document.getElementById("uwuReset").disabled = false;
+        document.getElementById("uwuReset").hidden = true;
     }
 }
 
@@ -438,36 +510,50 @@ function displayWaifuUpgrades() {
             case 'T':
                 if (player.waifu.tsundere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                     document.getElementById(upgradeID).disabled = false;
-                    // document.getElementById(upgradeID).innerHTML = getWaifuUpgradeDescription(upgradeID) + "<br />Cost : " + getWaifuUpgradeCost(upgradeID) + " uwu";
+                    document.getElementById(upgradeID).innerHTML = getWaifuUpgradeDescription(upgradeID) + "<br />Cost : " + getWaifuUpgradeCost(upgradeID) + " uwu";
                 } else {
                     document.getElementById(upgradeID).disabled = true;
                     document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
                 }
                 if (player.waifu.upgrades.includes(upgradeID))
                     document.getElementById(upgradeID).className = "stdButton small waifuUpgrade tsundereUpgradeBought";
+                else
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade tsundereUpgrade";
                 break;
             case 'D':
                 if (player.waifu.dandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                     document.getElementById(upgradeID).disabled = false;
+                    document.getElementById(upgradeID).innerHTML = getWaifuUpgradeDescription(upgradeID) + "<br />Cost : " + getWaifuUpgradeCost(upgradeID) + " uwu";
                 } else {
                     document.getElementById(upgradeID).disabled = true;
                     document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
                 }
                 if (player.waifu.upgrades.includes(upgradeID))
                     document.getElementById(upgradeID).className = "stdButton small waifuUpgrade dandereUpgradeBought";
+                else
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade dandereUpgrade";
                 break;
             case 'Y':
                 if (player.waifu.yandere.gte(getWaifuUpgradeRequirement(upgradeID))) {
                     document.getElementById(upgradeID).disabled = false;
+                    document.getElementById(upgradeID).innerHTML = getWaifuUpgradeDescription(upgradeID) + "<br />Cost : " + getWaifuUpgradeCost(upgradeID) + " uwu";
                 } else {
                     document.getElementById(upgradeID).disabled = true;
                     document.getElementById(upgradeID).innerHTML = "You need " + getWaifuUpgradeRequirement(upgradeID) + " waifus of this type to unlock this upgrade";
                 }
                 if (player.waifu.upgrades.includes(upgradeID))
                     document.getElementById(upgradeID).className = "stdButton small waifuUpgrade yandereUpgradeBought";
+                else
+                    document.getElementById(upgradeID).className = "stdButton small waifuUpgrade yandereUpgrade";
                 break;
         }
     }
+    if (player.waifu.upgrades.includes('T1'))
+        document.getElementById("waifuT1Effect").innerHTML = toScientific(getWaifuT1Effect().toString());
+    if (player.waifu.upgrades.includes('T2'))
+        document.getElementById("waifuT2Effect").innerHTML = toScientific(getWaifuT2Effect().toString());
+    if (player.waifu.upgrades.includes('T3'))
+        document.getElementById("waifuT3Effect").innerHTML = toScientific(getWaifuT3Effect().toString());
 }
 
 function displayWaifuStuff() {
@@ -499,6 +585,7 @@ function gameLoop() {
 function init() {
     player.owoGenerators = getOwOGenerators();
     player.waifu = getWaifuStuff();
+    player.startDate = Date.now();
     if (localStorage.getItem("Weeb-Simulator-playerdata") != null) {
         loadSave();
     }
@@ -506,6 +593,7 @@ function init() {
 
 function loadSave() {
     player = JSON.parse(localStorage.getItem("Weeb-Simulator-playerdata"));
+    // player.startDate = new Date(player.startDate)
     player.owo = new Decimal(player.owo);
     player.owoGenerators.forEach(generator => {
         generator.amount = new Decimal(generator.amount);
@@ -523,6 +611,7 @@ function loadSave() {
     player.waifu.dandere = new Decimal(player.waifu.dandere);
     player.waifu.yandere = new Decimal(player.waifu.yandere);
     // player.waifu.upgrades = new Array(player.waifu.upgrades);
+    player.rebirthAmount = new Decimal(player.rebirthAmount);
 }
 
 function save() {

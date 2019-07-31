@@ -163,26 +163,43 @@ td {
 }
 
 .waifuUpgrade {
+    max-width: fit-content;
+    min-height: 120px;
     width: 200px;
-    height: 120px;
+    height: fit-content;
     margin: 5px;
 }
 
-.tsundereUpgrade,
+.tsundereUpgrade:enabled {
+    background-color: black;
+    color: #f3532b;
+    border-color: #f3532b;
+}
+
+.dandereUpgrade:enabled {
+    background-color: black;
+    color: #2bbaf3;
+    border-color: #2bbaf3;
+}
+
+.yandereUpgrade:enabled {
+    background-color: black;
+    color: #992bf3;
+    border-color: #992bf3;
+}
+
 .tsundereUpgradeBought,
 .tsundereUpgradeBought:hover,
 .tsundereUpgradeBought:active {
     background-color: #f3532b;
 }
 
-.dandereUpgrade,
 .dandereUpgradeBought,
 .dandereUpgradeBought:hover,
 .dandereUpgradeBought:active {
     background-color: #2bbaf3;
 }
 
-.yandereUpgrade,
 .yandereUpgradeBought,
 .yandereUpgradeBought:hover,
 .yandereUpgradeBought:active {

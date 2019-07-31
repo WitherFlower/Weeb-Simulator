@@ -4,17 +4,17 @@ function getWaifuUpgradesData() {
         id: 'T1',
         requirement: new Decimal(1),
         cost: new Decimal(1),
-        description: "Gain a multiplier based on time played<br />Currently : ",
+        description: 'Gain a multiplier based on time played<br />Currently : <span id="waifuT1Effect"></span>x',
     }, {
         id: 'T2',
         requirement: new Decimal(2),
         cost: new Decimal(3),
-        description: "Gain a multiplier based on amount of rebirths<br />Currently : ",
+        description: 'Gain a multiplier based on amount of rebirths<br />Currently : <span id="waifuT2Effect"></span>x',
     }, {
         id: 'T3',
         requirement: new Decimal(5),
         cost: new Decimal(10),
-        description: "Gain a multiplier based on total amount of generator levels<br />Currently : ",
+        description: 'Gain a multiplier based on total amount of levels<br />Currently : <span id="waifuT3Effect"></span>x',
     }, {
         id: 'T4',
         requirement: new Decimal(10),
