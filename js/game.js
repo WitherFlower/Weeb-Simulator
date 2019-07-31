@@ -605,6 +605,7 @@ function loadSave() {
     player.weebEssence = new Decimal(player.weebEssence);
     player.moe = new Decimal(player.moe);
     player.uwu = new Decimal(player.uwu);
+    if (player.waifu == undefined) player.waifu = getWaifuStuff();
     player.waifu.total = new Decimal(player.waifu.total);
     player.waifu.available = new Decimal(player.waifu.available);
     player.waifu.tsundere = new Decimal(player.waifu.tsundere);
