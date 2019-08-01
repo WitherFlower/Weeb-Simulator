@@ -184,10 +184,10 @@ function uwuReset() {
             player.waifu.total = new Decimal(1);
             player.waifu.available = new Decimal(1);
         }
+        player.uwu = player.uwu.add(getuwuGain());
         player.rebirthAmount = player.rebirthAmount.add(1);
         player.owo = new Decimal(10);
         player.uwuReset = true;
-        player.uwu = player.uwu.add(getuwuGain());
         player.uwuGlitch = false;
         player.moe = new Decimal(0);
         if (player.waifu.upgrades.includes('Y1')) player.moe = new Decimal(1);
