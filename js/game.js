@@ -187,7 +187,7 @@ function uwuReset() {
         player.rebirthAmount = player.rebirthAmount.add(1);
         player.owo = new Decimal(10);
         player.uwuReset = true;
-        player.uwu = player.uwu.add(1);
+        player.uwu = player.uwu.add(getuwuGain());
         player.uwuGlitch = false;
         player.moe = new Decimal(0);
         if (player.waifu.upgrades.includes('Y1')) player.moe = new Decimal(1);
@@ -285,6 +285,9 @@ function buyWaifuUpgrade(upgradeID) {
                     if (player.uwu.gte(getWaifuUpgradeCost(upgradeID))) {
                         player.waifu.upgrades.push(upgradeID);
                         player.uwu = player.uwu.minus(getWaifuUpgradeCost(upgradeID));
+                        if (upgradeID == 'Y1' && player.moe == Decimal.ZERO) {
+                            player.moe = new Decimal(1);
+                        }
                     }
                 }
                 break;
@@ -295,6 +298,7 @@ function buyWaifuUpgrade(upgradeID) {
 function getWaifuT1Effect() {
     let timeElapsed = Date.now() - player.startDate;
     let secondstimeElapsed = Decimal.floor(timeElapsed / 1000);
+    if (Decimal.gte(1, secondstimeElapsed)) secondstimeElapsed = new Decimal(1);
     return Decimal.log10(secondstimeElapsed).div(2);
 }
 
