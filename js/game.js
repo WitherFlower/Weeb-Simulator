@@ -98,7 +98,7 @@ function maxAllowo() {
 
 function getEssenceGain() {
     if (player.waifu.upgrades.includes('D3')) {
-        let gain = Decimal.pow(10, Decimal.max(player.owo.log10(), 1).sqrt());
+        let gain = Decimal.max(0, Decimal.pow(10, Decimal.max(player.owo.log10(), 1).sqrt()).minus(50));
         if (player.waifu.upgrades.includes('D2')) gain = gain.times(5);
         return gain;
     }
@@ -126,7 +126,7 @@ function essenceReset() {
 function getEssenceEffect() {
     let effect = baseEssenceEffect;
     if (player.waifu.upgrades.includes('D1')) effect = 0.25;
-    if (player.waifu.upgrades.includes('Y4')) effect = Decimal.add(effect, Decimal.pow(2, player.moe).div(200));
+    if (player.waifu.upgrades.includes('Y4')) effect = Decimal.add(effect, Decimal.pow(20, player.moe).div(200));
     return effect;
 }
 
