@@ -97,7 +97,7 @@ function maxAllowo() {
 // Essence Stuff
 
 function getEssenceGain() {
-    if (player.waifu.upgrades.includes('D3')) {
+    if (player.waifu.upgrades.includes('D4')) {
         let gain = Decimal.max(0, Decimal.pow(10, Decimal.max(player.owo.log10(), 1).sqrt()).minus(50));
         if (player.waifu.upgrades.includes('D2')) gain = gain.times(5);
         return gain;
@@ -126,7 +126,7 @@ function essenceReset() {
 function getEssenceEffect() {
     let effect = baseEssenceEffect;
     if (player.waifu.upgrades.includes('D1')) effect = 0.25;
-    if (player.waifu.upgrades.includes('Y4')) effect = Decimal.add(effect, Decimal.pow(20, player.moe).div(200));
+    if (player.waifu.upgrades.includes('Y3')) effect = Decimal.add(effect, Decimal.pow(20, player.moe).div(200));
     return effect;
 }
 
@@ -164,7 +164,7 @@ function getMoeResetCost() {
 
 function getMoeBonus() {
     let bonus = baseMoeBonus;
-    if (player.waifu.upgrades.includes('Y3')) bonus = 0.04;
+    if (player.waifu.upgrades.includes('Y4')) bonus = 0.04;
     return bonus;
 }
 
@@ -224,7 +224,7 @@ function getWaifuStuff() {
 }
 
 function getWaifuCost() {
-    let cost = Decimal.pow(1.5, player.waifu.total).floor();
+    let cost = Decimal.pow(1.3, player.waifu.total).floor();
     return cost;
 }
 
@@ -351,7 +351,7 @@ function update() {
     } else {
         player.owo = new Decimal('1e400');
     }
-    if (player.waifu.upgrades.includes('D4')) updateEssence();
+    if (player.waifu.upgrades.includes('D3')) updateEssence();
     updateUwU();
 }
 

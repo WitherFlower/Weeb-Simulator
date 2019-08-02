@@ -8,17 +8,17 @@ function getWaifuUpgradesData() {
     }, {
         id: 'T2',
         requirement: new Decimal(2),
-        cost: new Decimal(3),
+        cost: new Decimal(5),
         description: 'Gain a multiplier based on amount of rebirths<br />Currently : <span id="waifuT2Effect"></span>x',
     }, {
         id: 'T3',
         requirement: new Decimal(5),
-        cost: new Decimal(10),
+        cost: new Decimal(20),
         description: 'Gain a multiplier based on total amount of levels<br />Currently : <span id="waifuT3Effect"></span>x',
     }, {
         id: 'T4',
         requirement: new Decimal(10),
-        cost: new Decimal(25),
+        cost: new Decimal(50),
         description: "Decrease owo needed for rebirth to 1e300",
     }, {
         id: 'D1',
@@ -28,18 +28,18 @@ function getWaifuUpgradesData() {
     }, {
         id: 'D2',
         requirement: new Decimal(2),
-        cost: new Decimal(3),
+        cost: new Decimal(5),
         description: "You gain 5 times more Weeb Essence",
     }, {
         id: 'D3',
         requirement: new Decimal(5),
-        cost: new Decimal(10),
-        description: "Change Weeb Essence Formula to a better one",
+        cost: new Decimal(20),
+        description: "Generate 0.1% of the WE you would get on reset every second"
     }, {
         id: 'D4',
         requirement: new Decimal(10),
-        cost: new Decimal(25),
-        description: "Generate 0.1% of the WE you would get on reset every second",
+        cost: new Decimal(50),
+        description: "Change Weeb Essence Formula to a better one",
     }, {
         id: 'Y1',
         requirement: new Decimal(1),
@@ -48,18 +48,18 @@ function getWaifuUpgradesData() {
     }, {
         id: 'Y2',
         requirement: new Decimal(2),
-        cost: new Decimal(3),
+        cost: new Decimal(5),
         description: "Decrease Moe cost logarithm by 10",
     }, {
         id: 'Y3',
         requirement: new Decimal(5),
-        cost: new Decimal(10),
-        description: "Increase Moe effect to 0.04x",
+        cost: new Decimal(20),
+        description: "Moe now boost Weeb Essence effect",
     }, {
         id: 'Y4',
         requirement: new Decimal(10),
-        cost: new Decimal(25),
-        description: "Moe now boost Weeb Essence effect",
+        cost: new Decimal(50),
+        description: "Increase Moe effect to 0.04x",
     }, )
     return upgradesData;
 }
